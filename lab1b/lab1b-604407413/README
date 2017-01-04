@@ -1,0 +1,23 @@
+George Archbold
+604407413
+CS 111
+
+   For this lab I included many libraries. I included these libraries to give me access to the
+standard c functions, termios, signals and handlers, threads, process forking, socket
+communication, data encryption, port specification, and options parsing. My server and client
+files include a list of global variables, a set of helper functions and then after comes my
+main. The helper functions control the terminal settings, execute thread functions, handle
+signals, and make error calls easier. Both files include two options, --encrypt to apply my
+encrytion key and algorithm to the data, and --port to specify the port number by which the
+two will communicate. The client has a third option, --log= which allows all the data
+communication between the client and the server to be recorded in a specified file.
+
+	 The client file sets up its end of the socket, and then creates two thread to deal
+with communication between the keyboard and the socket, and the socket and the terminal. The
+server file sets up its end of the socket, and then forks into two processes creating one child
+that runs a bash shell. It creates and connects the pipes between the parent process and the
+child. In the parent it creates two threads to deal with communication between the shell and the
+terminal. During the communication between the socket and the pipes, there are if statements
+that check for certain cases where the program is to exit with a certain return code.
+
+     I would like to use one slip day for this lab allowing me to turn it in before midnight of Tuesday April 19th. Thanks you.

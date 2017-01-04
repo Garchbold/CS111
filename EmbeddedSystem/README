@@ -1,0 +1,56 @@
+George Archbold
+604407413
+CS111
+
+EMBEDDED SYSTEM
+
+Here is the port info that I found from the config file and that I used to execute the tshark packet sniffer.
+
+host_ip: 164.67.194.240
+port: 8000
+range: 4
+rate: 3
+
+TLS:
+host_ip: 164.67.194.240
+port: 5000
+range: 4
+rate: 3
+
+tshark:
+host_ip: 164.67.194.240
+port: 8001
+
+
+
+Lab4-B-1
+In this picture, I set ran the udp_client and set up a standard connection between the server and the client. This simply reads the input server and opens a connection to the specified address. It does not have any security measures, and allows a free connection. 
+
+Lab4-B-2
+In this picture, the tshark program runs like a normal packet sniffer. It examines the connection between the client and the server over the specified port, and outputs the data it receives. You can clearly see that tshark was able to read exactly what was sent over the network, as there is no encryption or authentication over the UDP server.
+
+Lab4-B-3
+In this picture, you can the output changed exactly as you would expect it to. When you change the rate using the set_rate program, it sends the client a new value, which it then uses to increase or decrease the duration of waits between each loop of the server communication. Here we can see the error however. The server sends two acknowledgements which interferes with the order of reads and writes. After the set_rate program is ran it 
+
+Lab4-B-4
+In this picture, you can see that after running start_attack, the server had no defense against the attack, and the attack did not have any authentication or security to break through. The start_attack program changed the rate and you can see that in the change of current settings.
+
+Lab4–D-1
+In this picture, I set ran the tls_client and set up a standard connection between the server and the client. This is different from the udp server because upon setting up the connection it authenticates the client and sets up a specified encryption algorithm. This guarantees a level of security over the network.
+
+Lab4-D-2
+In this picture, the same tshark packet sniffer is unable to decipher the information being sent over the server. It outputs the data it receives in the same way it did before, however in this case it does not know the encryption/decryption keys and has no way of turning the data it read it sensible text.
+
+Lab4-D-3
+In this picture, you can see that the set_rate program successfully changes the rate of the client running. It is able to set up a secure connection and thus transfer its data over. There is still the problem of the communication not corresponding properly and double messages being sent for acknowledgements. 
+
+Lab4-D-4
+In this picture, you can see that there is no change in the output. The attack fails to have an effect on the tls server because it attempts to change the rate by sending the new data over an unprotected SSL socket. The protection that the tls server implements protects it from this attack. The reason the set_rate function works sets up an secure authenticated communication path before sending its data.
+
+Lab4-E-1
+In this picture, you can see how the tls client ran before and after the execution of ./set_rate 1.
+In my modifications to tls_client.c I created a new thread that handled the SSL read execution.To deal with the double acknowledgement being sent I added a account flag that checked if an ack had already been sent for that message. Then in the if statement that calls sscanf and sends the acknowledgement I set the flag and do not unset it, until that block of code is done executing to prevent it from printing twice. After the acknowledgement has been sent and the duplicate being prevented, I rest the flag and call SSL read again to clear the buffer so that the corresponding read and write calls over the network remain in sync and are not offset by the print statement about the rate change. By creating a new SSL read thread, and implementing an account flag I was able to fix the two errors that were occurring in the server client communication.
+
+Lab4-E-2
+This picture shows the creation of the log that records all communication and transactions done over the server client communication network. The output to the log is the same output as E-1 however I just used a file descriptor to create a log file and redirect print statements to the log. The one difference in this case, is that even though the modifications to tls_client.c gracefully handle the case of errors and keep server communication in tact, the log file still mentions the instances where a second acknowledgement may have been sent, as this is still communication over the server even though it may have no actual effect on read or writes.
+

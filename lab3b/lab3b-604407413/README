@@ -1,0 +1,14 @@
+George Archbold		
+604407413
+Daniel Berestov		
+404441309
+
+Project 3B
+CS111
+
+	We decided to do this project in C. We knew that it would have 
+been easier in Python, however we were used to using C and were up for the challenge. We used a for loop and fgetc to read through every line of each document counting up the number of lines. Thenwe made structs for each of the different csv files with a variable in it to use for later reference. We used a getfield function which took a pointer to a line of a given csv file and read through it using the commas as delimiters, and extracting a given field. The shortcoming of this function was that it corrupted the pointer passed to it, so we had to duplciate every entry before passing it and extracting the proper information. After doing this we created an array of structs for each file with all the necessary information that we needed to check for the specified corruptions.
+	In order to check for unallocated blocks, we looped through all
+the inodes values and checked the corresponding bitmap checking for inconsitencies. This presented the challenge of searching through the indirect blocks as well, however this just required many for loops. In order to check for duplicately allocated blocks we did a similar thing, but checked for blocks that had multiple inodes using them. To check for unallocated inodes, we checked the inode and directory entry numbers in the directory file against the entries in the inode file to check for inconsitencies. To check for missing inodes, we just looped through the bitmap and made sure that all the inodes not listed in the inode file were also not marked in the bitmap.
+	To check the link count for each inode, we had go through the 
+inode file, and check the link count and then go through an manually count how many inodes linked to that specific inode and make sure they matched up. To check the directory entries for "." and ".." we had to check the parent child directory relationship for all the ".." entries and make sure that that link existed. Finally for the invalid block pointer, we added a couple if statements in the code for the unallocated blocks that made sure the block pointer values were in a valid range between zero and the maximum block size. 

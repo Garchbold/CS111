@@ -1,0 +1,30 @@
+George Archbold
+604407413
+Project 2B
+CS111
+
+	In lab 2B, I included stdio.h, stdlib.h, and string.h to account
+for all the standard c library functions and string functions like 
+strcmp(). I included pthread.h so I could create and join the threads.
+I also included getopt.h so that I could properly accept the different command line options. Lastly I included time.h to use the timer functions and SortedList.h to use the SortedList functions that I wrote in the .c file. 
+	This program works similarly to project 2A, however it deals with 
+more complex synchronization. I had to synchronize list alteration in this project. This included writing the functions that I would use to alter the list, and properly implementing the safety precautions to avoid segmentation faults and memory access errors.
+
+
+QUESTION 2B.1A:
+Explain the variation in time per operation vs the number of iterations?
+
+I observed the time per operation vs the number of operations to be a parabolic graph that is much more heavily weighted on the right side, as can be seen in graph1.png. The reason for the initial decrease is because the overhead of creating a thread is not utilized with a small number of operations, as the creation is much more expensive than each operations. As the program is run with more iterations the time per iterations evens out as the creation of each thread pays of by executing many more iterations. 
+The reason that the curve parabolically curves back up at the right end, is because of the nature of linked lists. There is a threshhold that once you pass, searching through linked list become very expensive as you are required to iterate through the entire loop just to find the specific node you are trying to access.
+
+QUESTION 2B.1B:
+How would you propose to correct for this effect?
+
+In order to correct for this effect and get results that are more meaningful for comparison, you would have to divide the time per operations by the total number of nodes in a list. This will provide you with a scaled version of the result that allows for a fair comparison because it is not reasonabe to compare the time per comparison for a list of size 10 to a list of size 10000. The list of size 10000 is going to take much much longer to operate on.
+
+QUESTIONS 2B.2A:
+Compare the variation in time per protected operation vs the number of threads in Project 2B and in Project 2A.  Explain the difference.
+
+There are a few components of Project 2B that are responsible for the diparity between timer per operations. In Project 2B the critical section is vastly larger than 2A. In 2A all the program was doing was incrementing and decrementing a counter. In 2B the program must search through a linked list, which depending on the size of the list, takes much much longer. Due to the critical section being much larger, the lock is held for much longer at a time. Subsequently this cause more concurrency conflict, which means more blocked threads waiting for each other, and a higher probability of conflict. The comparison between 2A and 2B shows the effects and added overhead of having to synchronize a larger section of critical code.
+
+
